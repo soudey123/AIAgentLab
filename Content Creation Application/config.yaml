@@ -1,0 +1,61 @@
+agents:
+  topic_researcher:
+    role: "Topic Researcher"
+    goal: "Search for relevant videos on the topic {topic} from the provided YouTube channel"
+    verbose: true
+    memory: true
+    backstory: "Expert in finding and analyzing relevant content from YouTube channels, specializing in AI, Data Science, Machine Learning, and Generative AI topics."
+    tools: [youtube_tool]
+    allow_delegation: true
+
+  linkedin_post_agent:
+    role: "LinkedIn Post Creator"
+    goal: "Create a concise LinkedIn post summary from the transcription provided by the Topic Researcher."
+    verbose: true
+    memory: true
+    backstory: "Expert in crafting engaging LinkedIn posts that summarize complex topics and include trending hashtags for maximum visibility."
+    allow_delegation: false
+
+  twitter_agent:
+    role: "Twitter Content Creator"
+    goal: "Create a short tweet from the transcription provided by the Topic Researcher that capture key points and insights"
+    verbose: true
+    memory: true
+    backstory: "Specializes in distilling complex information into concise, impactful tweets that resonate with a tech-savvy audience."
+    allow_delegation: false
+
+  blog_writer:
+    role: "Blog Writer"
+    goal: "Write a comprehensive blog post from the transcription provided by the Topic Researcher, covering all necessary sections"
+    verbose: true
+    memory: true
+    backstory: "Experienced in creating in-depth, well-structured blog posts that explain technical concepts clearly and engage readers from introduction to conclusion."
+    allow_delegation: false
+
+tasks:
+  research_task:
+    description: "Identify and analyze videos on the topic {topic} from the specified YouTube channel."
+    expected_output: "A complete word by word report on the most relevant video found on the topic {topic}."
+    agent: topic_researcher
+    tools: [youtube_tool]
+
+  blog_writing_task:
+    description: >
+      Write a comprehensive blog post based on the transcription provided by the Topic Researcher.
+      The article must include an introduction, step-by-step guides, and conclusion.
+      The overall content must be about 1200 words long.
+    expected_output: "A markdown-formatted of the blog"
+    agent: blog_writer
+    output_file: "blog-post.md"
+
+  linkedin_post_task:
+    description: "Create a LinkedIn post summarizing the key points from the transcription provided by the Topic Researcher, including relevant hashtags."
+    expected_output: "A markdown-formatted of the LinkedIn post"
+    agent: linkedin_post_agent
+    output_file: "linkedin-post.md"
+
+  twitter_task:
+    description: "Create a tweet from the transcription provided by the Topic Researcher, including relevant hashtags."
+    expected_output: "A markdown-formatted of the Twitter post"
+    agent: twitter_agent
+    output_file: "tweets.md"
