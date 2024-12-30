@@ -1,0 +1,6 @@
+streamlit==1.26.0         # Web app framework
+serpapi==2.4.2           # For fetching articles from Google Scholar
+openai==1.2.0            # For GPT integration
+PyYAML==6.0              # For parsing YAML configuration files
+python-dotenv==1.0.0     # For environment variable management
+pandas==2.1.3            # For data manipulation and tabular display
