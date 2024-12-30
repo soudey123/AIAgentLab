@@ -6,6 +6,7 @@ This project is a Streamlit-based application that helps users find research art
 
 ## Project Structure
 
+```plaintext
 .
 ├── config/                    # Configuration files
 │   ├── data_models.yaml       # Data models for articles and user profiles
@@ -20,6 +21,7 @@ This project is a Streamlit-based application that helps users find research art
 ├── app.py                     # Main Streamlit app
 ├── requirements.txt           # Python dependencies
 
+```
 
 ## Features
 Search Research Articles: Fetch articles from Google Scholar based on a topic, start date, and end date.
