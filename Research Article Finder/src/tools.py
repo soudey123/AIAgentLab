@@ -10,7 +10,7 @@ class ResearchTools:
         """
         Fetch articles from Google Scholar using SERPAPI with citation numbers included.
         """
-        api_key = "76a4acf1ebbb53f041a35664d654017acc1b8d42482ea42eaf816df09b3b0f7b"  # Replace with your SERPAPI key
+        api_key = "<YOUR KEY>"  # Replace with your SERPAPI key
         params = {
             "engine": "google_scholar",
             "q": query,
@@ -68,7 +68,7 @@ class ResearchTools:
         """
         Use GPT to refine and rank articles based on relevance and citation numbers.
         """
-        openai.api_key = "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" # Replace with your OpenAI API key
+        openai.api_key = "<YOUR KEY>" # Replace with your OpenAI API key
 
         # Prepare prompt
         articles_text = "\n".join([
