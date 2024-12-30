@@ -6,7 +6,6 @@ This project is a Streamlit-based application that helps users find research art
 
 ## Project Structure
 
-```plaintext
 .
 ├── config/                    # Configuration files
 │   ├── data_models.yaml       # Data models for articles and user profiles
