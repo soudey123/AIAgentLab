@@ -1,0 +1,4 @@
+Python 3.8
+Streamlit 1.15
+Pandas
+OpenAI Python SDK
