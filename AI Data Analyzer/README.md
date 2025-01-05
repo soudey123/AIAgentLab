@@ -77,4 +77,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ### Source Code
 
-Find the source code on GitHub: [AI Data Analyzer Repository](https://github.com/soudey123/AIAgentLab/ai-data-analyzer)
+Find the source code on GitHub: [AI Data Analyzer Repository ([https://github.com/soudey123/AIAgentLab/tree/main/AI%20Data%20Analyzer])
