@@ -1,0 +1,20 @@
+# config/tasks.yaml
+
+tasks:
+  profile_analysis:
+    agent: profile_manager
+    description_template: >
+      Analyze user profile with discipline '{discipline}' and interests {interests}.
+      Consider reading history and preferred journals for better recommendations.
+
+  article_retrieval:
+    agent: article_retriever
+    description_template: >
+      Find recent articles in {discipline} field that match the user's interests.
+      Consider preferred journals and avoid articles already in reading history.
+
+  content_analysis:
+    agent: content_analyzer
+    description_template: >
+      Analyze retrieved articles and rank them based on relevance to user interests.
+      Generate personalized recommendations with explanations.

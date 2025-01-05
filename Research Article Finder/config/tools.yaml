@@ -1,0 +1,35 @@
+# config/tools.yaml
+research_tools:
+  google_scholar:
+    name: search_google_scholar
+    description: Fetch articles from Google Scholar for a given topic and date range.
+    parameters:
+      - name: query
+        type: str
+        description: The topic or query to search for articles.
+      - name: start_date
+        type: datetime
+        description: The start date for filtering articles.
+      - name: end_date
+        type: datetime
+        description: The end date for filtering articles.
+      - name: max_results
+        type: int
+        description: The maximum number of articles to fetch.
+    return_type: List[Article]
+    extra_fields:
+      - name: citation_count
+        type: int
+        description: Citation count for each article, sorted in descending order.
+
+  process_with_gpt:
+    name: process_with_gpt
+    description: Use GPT to refine and rank the articles based on relevance and citations.
+    parameters:
+      - name: articles
+        type: List[Article]
+        description: The list of articles to process and rank.
+      - name: query
+        type: str
+        description: The topic or query for which articles are being processed.
+    return_type: List[Article]

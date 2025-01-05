@@ -1,0 +1,35 @@
+# config/data_models.yaml
+article:
+  attributes:
+    - name: title
+      type: str
+    - name: authors
+      type: List[str]
+    - name: journal
+      type: str
+    - name: abstract
+      type: str
+    - name: publication_date
+      type: datetime
+    - name: keywords
+      type: List[str]
+    - name: url
+      type: str
+    - name: discipline
+      type: str
+    - name: citation_count
+      type: Optional[int]
+
+user_profile:
+  attributes:
+    - name: discipline
+      type: str
+    - name: interests
+      type: List[str]
+    - name: preferred_journals
+      type: List[str]
+    - name: reading_history
+      type: List[str]
+  storage:
+    method: pickle
+    filename: user_profile.pkl
