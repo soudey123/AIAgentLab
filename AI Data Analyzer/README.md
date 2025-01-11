@@ -15,6 +15,7 @@ AI Data Analyzer is a powerful and user-friendly Streamlit application that leve
 - Streamlit 1.15+
 - Pandas
 - OpenAI Python SDK
+- plotly
 
 ## Installation
 
