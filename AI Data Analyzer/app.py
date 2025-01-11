@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from openai import OpenAI
+import openai
 import plotly.express as px
 import time
 
@@ -70,7 +70,8 @@ if uploaded_file is not None:
             try:
                 # Loading animation while processing
                 with st.spinner('AI is analyzing your data...'):
-                    client = OpenAI(api_key=api_key)
+                    #client = OpenAI(api_key=api_key)
+                    openai.api_key = api_key
                     
                     # Create context about the data
                     data_info = f"""
@@ -80,8 +81,9 @@ if uploaded_file is not None:
                     """
                     
                     # Get AI response
-                    response = client.chat.completions.create(
-                        model="gpt-4-turbo-preview",
+                    #response = client.chat.completions.create(
+                    response = openai.ChatCompletion.create(
+                        model="gpt-4-turbo",
                         messages=[
                             {"role": "system", "content": "You are a data analysis expert. Provide clear, concise insights about the data."},
                             {"role": "user", "content": f"Data information: {data_info}\n\nUser query: {user_query}"}
