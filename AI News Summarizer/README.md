@@ -96,11 +96,6 @@ Your custom summarization instructions here...
 - `.env.example`: Example environment variables file
 - `requirements.txt`: Required Python packages
 
-## Running Tests 🧪
-
-```bash
-python -m pytest tests/
-```
 
 ## Contributing 🤝
 
@@ -123,4 +118,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contact 📧
 
 Your Name - [@soudey123](https://x.com/soudey123)
-Project Link: [https://github.com/yourusername/ai-news-summarizer](https://github.com/yourusername/ai-news-summarizer)
+
