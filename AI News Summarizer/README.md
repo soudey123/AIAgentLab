@@ -64,9 +64,9 @@ python src/news_summarizer.py
    - Arguments: `path/to/src/scheduler.py`
 
 #### macOS/Linux (Cron)
-Add to crontab (runs every Monday at 9 AM):
+Add to crontab (runs every Sunday at 7 AM MT):
 ```bash
-0 9 * * 1 /usr/bin/python3 /path/to/src/scheduler.py
+0 7 * * 0 /usr/bin/python3 /path/to/src/scheduler.py
 ```
 
 ## Configuration ⚙️
@@ -92,17 +92,10 @@ Your custom summarization instructions here...
 ## File Structure 📁
 
 - `src/news_summarizer.py`: Main script for fetching and summarizing news
-- `src/scheduler.py`: Scheduling script for automated execution
 - `src/config.py`: Configuration settings
-- `tests/`: Unit tests
 - `.env.example`: Example environment variables file
 - `requirements.txt`: Required Python packages
 
-## Running Tests 🧪
-
-```bash
-python -m pytest tests/
-```
 
 ## Contributing 🤝
 
@@ -124,5 +117,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact 📧
 
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter)
-Project Link: [https://github.com/yourusername/ai-news-summarizer](https://github.com/yourusername/ai-news-summarizer)
+Your Name - [@soudey123](https://x.com/soudey123)
+
