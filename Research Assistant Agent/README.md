@@ -22,16 +22,7 @@ This system uses a *team of AI agents* to read real source documents, extract ev
 
 ## 🏗️ High-Level Architecture
 
-```mermaid
-flowchart TD
-    U[User<br/>(Topic + URLs)] --> S[Streamlit UI<br/>(app.py)]
-    S --> O[CrewAI Orchestrator]
-
-    O --> R[Researcher Agent<br/>- Reads URLs<br/>- Extracts evidence<br/>- Produces research notes]
-    R --> M[Summarizer Agent<br/>- Consumes research notes<br/>- Creates structured brief]
-
-    M --> F[Final Markdown Report<br/>(output/report.md)]
-```
+![Research Agent Workflow](https://github.com/soudey123/AIAgentLab/blob/main/Research%20Assistant%20Agent/Research%20Agent%20Workflow.png))
 
 ---
 
