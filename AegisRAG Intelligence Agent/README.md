@@ -14,6 +14,10 @@ It is designed for **research and enterprise workflows** where **grounding, cita
 > 🚫 This project does **NOT** use CrewAI.  
 > ✅ Orchestration is done via **LangGraph**.
 
+![Application](https://github.com/soudey123/AIAgentLab/blob/main/AegisRAG%20Intelligence%20Agent/App%20Screenshot%201.png)
+
+![Application](https://github.com/soudey123/AIAgentLab/blob/main/AegisRAG%20Intelligence%20Agent/App%20Screenshot%201.png)
+
 ---
 
 ## ✨ Key Features
@@ -30,7 +34,7 @@ It is designed for **research and enterprise workflows** where **grounding, cita
 
 ## 🧠 System Architecture
 
-
+![Workflow](https://github.com/soudey123/AIAgentLab/blob/main/AegisRAG%20Intelligence%20Agent/AEGISRAG%20Agent%20Workflow.png)
 
 ---
 
