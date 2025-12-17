@@ -5,7 +5,7 @@ A production-ready **multi-agent research assistant** built with **CrewAI**, **G
 
 This system uses a *team of AI agents* to read real source documents, extract evidence, and generate a structured, executive-ready research brief — even in **restricted enterprise environments** where web search APIs are blocked.
 
-![Application Interface](https://github.com/soudey123/AIAgentLab/blob/main/Research%20Assistant%20Agent/app_screenshot.png))
+![Application Interface](https://github.com/soudey123/AIAgentLab/blob/main/Research%20Assistant%20Agent/app_screenshot.png)
 
 ---
 
