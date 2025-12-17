@@ -1,36 +1,54 @@
-# 🧠 Research Assistant Agent  
-### CrewAI · GPT-5.2 · Streamlit
+# 🛡️ AegisRAG Intelligence Agent
+**Evidence‑First RAG with LangGraph + LangChain**
 
-A production-ready **multi-agent research assistant** built with **CrewAI**, **GPT-5.2**, and a **Streamlit UI**.
+![Python](https://img.shields.io/badge/python-3.11%2B-blue)
+![LangChain](https://img.shields.io/badge/LangChain-enabled-green)
+![LangGraph](https://img.shields.io/badge/LangGraph-orchestration-purple)
+![VectorDB](https://img.shields.io/badge/VectorDB-Chroma-orange)
+![Status](https://img.shields.io/badge/status-active-success)
+![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-This system uses a *team of AI agents* to read real source documents, extract evidence, and generate a structured, executive-ready research brief — even in **restricted enterprise environments** where web search APIs are blocked.
+AegisRAG is a **guarded, evidence‑first Retrieval‑Augmented Generation (RAG) system** built using **LangGraph** and **LangChain**.  
+It is designed for **research and enterprise workflows** where **grounding, citations, and refusal on weak evidence** matter.
 
----
-
-## 🔍 What This Project Does
-
-- Accepts a **topic + list of URLs**
-- Runs a **2-agent CrewAI workflow**
-  - **Researcher Agent** → evidence extraction
-  - **Summarizer Agent** → structured synthesis
-- Outputs a **Markdown research report**
-- Supports both:
-  - **CLI execution**
-  - **Interactive Streamlit UI**
+> 🚫 This project does **NOT** use CrewAI.  
+> ✅ Orchestration is done via **LangGraph**.
 
 ---
 
-## 🏗️ High-Level Architecture
+## ✨ Key Features
+
+- 🔎 **Public data ingestion** from **arXiv + Europe PMC (PubMed)**
+- 🧠 **Vector search** using **Chroma**
+- 🧩 **LangGraph workflow**: Retrieve → Synthesize
+- 🛡️ **Guardrails**: context‑only answers, mandatory citations
+- ❌ Explicit **“Insufficient evidence”** responses
+- 🖥️ **CLI + Streamlit UI**
+- 📄 **Markdown reports** with sources
+
+---
+
+## 🧠 System Architecture
 
 ```mermaid
 flowchart TD
-    U[User<br/>(Topic + URLs)] --> S[Streamlit UI<br/>(app.py)]
-    S --> O[CrewAI Orchestrator]
+    U[User Question] --> UI[CLI main_query.py<br/>or Streamlit app.py]
+    UI --> LG[LangGraph Orchestrator<br/>rag_graph.py]
 
-    O --> R[Researcher Agent<br/>- Reads URLs<br/>- Extracts evidence<br/>- Produces research notes]
-    R --> M[Summarizer Agent<br/>- Consumes research notes<br/>- Creates structured brief]
+    LG --> RET[Retrieve Node<br/>Chroma similarity search]
+    RET --> VDB[(Chroma Vector DB)]
+    VDB --> RET
 
-    M --> F[Final Markdown Report<br/>(output/report.md)]
+    RET --> SYN[Synthesize Node (Guarded)<br/>GPT‑5.2]
+    SYN --> OUT[Answer + Evidence + Unknowns + Sources]
+
+    subgraph Ingestion Pipeline
+        Q[Seed Queries] --> AX[arXiv Collector]
+        Q --> EP[Europe PMC Collector]
+        AX --> IDX[Embed & Index]
+        EP --> IDX
+        IDX --> VDB
+    end
 ```
 
 ---
@@ -38,182 +56,115 @@ flowchart TD
 ## 📁 Project Structure
 
 ```
-research-assistant-agent/
-├── app.py                # Streamlit UI
+AegisRAG/
+├── app.py                   # Streamlit UI
 ├── requirements.txt
-├── .env                  # API keys (not committed)
-├── output/
-│   └── report.md         # Generated research brief
+├── .env                     # secrets (DO NOT COMMIT)
+├── chroma_db/               # persisted vector store
 └── src/
-    ├── main.py           # CLI entry point
-    ├── crew.py           # Agent + task definitions
-    ├── tools.py          # Custom tools (URL fetch, URL mode)
-    └── prompts.py        # Agent instructions
+    ├── main_ingest.py       # data ingestion
+    ├── main_query.py        # CLI query runner
+    ├── collectors/          # arXiv + Europe PMC
+    ├── ingest/              # embedding + indexing
+    ├── rag/                 # retriever
+    └── graph/               # LangGraph workflow
 ```
 
 ---
 
-## ⚙️ Setup Instructions
+## ⚙️ Setup
 
-### 1️⃣ Python Environment
-
-Requires **Python 3.10+** (recommended: **Python 3.12**)
+### 1️⃣ Virtual Environment
 
 ```bash
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 ```
-
----
 
 ### 2️⃣ Install Dependencies
 
 ```bash
 pip install -r requirements.txt
-```
-
-**`requirements.txt`**
-```txt
-crewai
-streamlit
-python-dotenv
-requests
-beautifulsoup4
+pip install -U langchain-chroma
 ```
 
 ---
 
-### 3️⃣ Environment Variables
+## 🔐 Configuration
 
-Create a `.env` file in the project root:
+Create `.env` in project root:
 
 ```env
-OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxx
+OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxx
+CHROMA_DIR=./chroma_db
+CHROMA_COLLECTION=research_corpus
 ```
 
-> ⚠️ Never commit `.env` to source control.
-
 ---
 
-## 🧠 Agent Design
-
-### 🔍 Researcher Agent
-- Reads user-provided URLs
-- Fetches and cleans webpage content
-- Extracts evidence and key findings
-- Produces **research notes with sources**
-
-### 📝 Summarizer Agent
-- Consumes research notes only
-- Creates a structured brief including:
-  - Executive summary
-  - Key insights
-  - Risks / unknowns
-  - Recommendations
-  - Sources
-
-### Why Two Agents?
-Separating **research** from **summarization**:
-- reduces hallucinations
-- improves traceability
-- mirrors real analyst workflows
-
----
-
-## 🚀 Running the Agent
-
-### Option 1: Command Line (Headless)
+## 📥 Ingest Data
 
 ```bash
-python -m src.main
+python -m src.main_ingest
 ```
 
-Or pass a custom topic + URLs:
+Clean rebuild:
 
 ```bash
-python -m src.main "AI Research Paper List" \
-  https://arxiv.org/abs/1706.03762 \
-  https://arxiv.org/abs/2303.08774
-```
-
-Output will be written to:
-
-```
-output/report.md
+rm -rf chroma_db
+python -m src.main_ingest
 ```
 
 ---
 
-### Option 2: Streamlit UI (Recommended)
+## 🔎 Query (CLI)
+
+```bash
+python -m src.main_query
+```
+
+Example:
+```
+What evaluation methods are commonly used for retrieval‑augmented generation systems?
+```
+
+---
+
+## 🖥️ Streamlit UI
 
 ```bash
 streamlit run app.py
 ```
 
-**UI Features**
-- Topic input
-- URL input (one per line)
-- Run button
-- Live output preview
-- Downloadable Markdown report
-- Custom colorful styling
+---
+
+## 🛡️ Guardrails Philosophy
+
+AegisRAG enforces:
+
+- Context‑only answers
+- Mandatory citations
+- Explicit refusal when evidence is weak
+- Separation of retrieval vs synthesis
+
+This makes it suitable for:
+- Research assistants
+- Compliance‑sensitive domains
+- Enterprise knowledge systems
 
 ---
 
-## 🌐 Why URL-Only Mode?
+## 🚀 Roadmap
 
-Many enterprise networks block:
-- Google / Serper
-- DuckDuckGo
-- Wikipedia APIs
-
-This project intentionally supports **URL-only mode**, making it:
-
-- deterministic
-- reliable
-- production-friendly
-- resistant to hallucinations
-
-You control the sources → the agent cannot invent facts.
+- Evidence strength grading (strong / medium / weak)
+- Query rewriter agent
+- Source filters
+- Evaluation harness
+- Scheduled ingestion
+- PDF ingestion
 
 ---
 
-## 🧩 Extending the System
+## 📜 License
 
-Easy upgrades:
-- Add a **fact-checker agent**
-- Add **citation validation**
-- Add **comparison tables**
-- Integrate **RAG / vector databases**
-- Schedule runs (cron / Airflow)
-- Deploy on Streamlit Cloud or internal infra
-
----
-
-## 📌 Use Cases
-
-- Competitive analysis
-- Literature reviews
-- Market research
-- Technical deep dives
-- Internal knowledge synthesis
-- AI / ML paper summaries
-
----
-
-## 📄 License
-
-MIT (or your preferred license)
-
----
-
-## ⭐ Acknowledgements
-
-Built with:
-- **CrewAI**
-- **OpenAI GPT-5.2**
-- **Streamlit**
-
----
-
-If this project helped you, ⭐ the repo and share feedback!
+MIT License
