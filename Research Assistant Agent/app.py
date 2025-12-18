@@ -11,6 +11,32 @@ from src.tools import write_file
 ROOT = Path(__file__).resolve().parent
 load_dotenv(ROOT / ".env")
 
+
+# ---------------------------
+# ✅ Helper: strip markdown fences
+# ---------------------------
+def strip_markdown_fences(text: str) -> str:
+    """
+    Removes leading/trailing ``` or ```markdown fences
+    so Streamlit renders markdown instead of code blocks.
+    """
+    if not text:
+        return text
+
+    t = text.strip()
+
+    if t.startswith("```"):
+        lines = t.splitlines()
+        # remove opening fence line: ``` or ```markdown
+        lines = lines[1:]
+        # remove closing fence if present
+        if lines and lines[-1].strip().startswith("```"):
+            lines = lines[:-1]
+        t = "\n".join(lines).strip()
+
+    return t
+
+
 st.set_page_config(
     page_title="Research Assistant Agent (CrewAI)",
     page_icon="🧠",
@@ -210,23 +236,27 @@ if run_btn:
     with st.spinner("Running agents… (Researcher → Summarizer)"):
         try:
             # If you want the crew to attempt search when urls is empty, just pass None.
-            # If you pass an empty list [], the crew will treat it as 'provided URLs = none' (depending on your build_crew logic).
             urls_arg = urls if urls else (None if try_search else [])
 
             crew = build_crew(topic, urls=urls_arg)
             result = crew.kickoff()
             result_text = str(result)
 
+            # ✅ Strip fences BEFORE saving/rendering
+            cleaned = strip_markdown_fences(result_text)
+
             out_path = f"output/{save_name}"
-            write_file(out_path, result_text)
+            write_file(out_path, cleaned)
 
             st.markdown("<div class='ok'>✅ Done! Saved to <b>output/</b>.</div>", unsafe_allow_html=True)
-            output_placeholder.markdown(result_text)
+
+            # ✅ Render CLEANED markdown (fixes raw/code-block look)
+            output_placeholder.markdown(cleaned)
 
             # Download button
             st.download_button(
                 label="⬇️ Download report",
-                data=result_text.encode("utf-8"),
+                data=cleaned.encode("utf-8"),
                 file_name=save_name,
                 mime="text/markdown",
             )
