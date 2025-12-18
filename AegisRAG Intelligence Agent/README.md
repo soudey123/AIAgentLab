@@ -14,6 +14,10 @@ It is designed for **research and enterprise workflows** where **grounding, cita
 > 🚫 This project does **NOT** use CrewAI.  
 > ✅ Orchestration is done via **LangGraph**.
 
+![Application](https://github.com/soudey123/AIAgentLab/blob/main/AegisRAG%20Intelligence%20Agent/App%20Screenshot%201.png)
+
+![Application](https://github.com/soudey123/AIAgentLab/blob/main/AegisRAG%20Intelligence%20Agent/App%20Screenshot%201.png)
+
 ---
 
 ## ✨ Key Features
@@ -30,26 +34,7 @@ It is designed for **research and enterprise workflows** where **grounding, cita
 
 ## 🧠 System Architecture
 
-```mermaid
-flowchart TD
-    U[User Question] --> UI[CLI main_query.py<br/>or Streamlit app.py]
-    UI --> LG[LangGraph Orchestrator<br/>rag_graph.py]
-
-    LG --> RET[Retrieve Node<br/>Chroma similarity search]
-    RET --> VDB[(Chroma Vector DB)]
-    VDB --> RET
-
-    RET --> SYN[Synthesize Node (Guarded)<br/>GPT‑5.2]
-    SYN --> OUT[Answer + Evidence + Unknowns + Sources]
-
-    subgraph Ingestion Pipeline
-        Q[Seed Queries] --> AX[arXiv Collector]
-        Q --> EP[Europe PMC Collector]
-        AX --> IDX[Embed & Index]
-        EP --> IDX
-        IDX --> VDB
-    end
-```
+![Workflow](https://github.com/soudey123/AIAgentLab/blob/main/AegisRAG%20Intelligence%20Agent/AEGISRAG%20Agent%20Workflow.png)
 
 ---
 
