@@ -47,7 +47,8 @@ def _effective_metadata(metadata, metadata_transformer):
     non_none_metadata = () if metadata is None else metadata
     if metadata_transformer is None:
         return non_none_metadata
-    return metadata_transformer(non_none_metadata)
+    else:
+        return metadata_transformer(non_none_metadata)
 
 
 def _credentials(grpc_call_options):
@@ -117,7 +118,8 @@ class _Rendezvous(future.Future, face.Call):
             rpc_error_call = self._future.exception(timeout=timeout)
             if rpc_error_call is None:
                 return None
-            return _abortion_error(rpc_error_call)
+            else:
+                return _abortion_error(rpc_error_call)
         except grpc.FutureTimeoutError:
             raise future.TimeoutError()
         except grpc.FutureCancelledError:
@@ -132,7 +134,7 @@ class _Rendezvous(future.Future, face.Call):
             raise future.CancelledError()
 
     def add_done_callback(self, fn):
-        self._future.add_done_callback(lambda _ignored_callback: fn(self))
+        self._future.add_done_callback(lambda ignored_callback: fn(self))
 
     def __iter__(self):
         return self
@@ -207,12 +209,13 @@ def _blocking_unary_unary(
                 credentials=_credentials(protocol_options),
             )
             return response, _Rendezvous(None, None, call)
-        return multi_callable(
-            request,
-            timeout=timeout,
-            metadata=_metadata.unbeta(effective_metadata),
-            credentials=_credentials(protocol_options),
-        )
+        else:
+            return multi_callable(
+                request,
+                timeout=timeout,
+                metadata=_metadata.unbeta(effective_metadata),
+                credentials=_credentials(protocol_options),
+            )
     except grpc.RpcError as rpc_error_call:
         raise _abortion_error(rpc_error_call)
 
@@ -299,12 +302,13 @@ def _blocking_stream_unary(
                 credentials=_credentials(protocol_options),
             )
             return response, _Rendezvous(None, None, call)
-        return multi_callable(
-            request_iterator,
-            timeout=timeout,
-            metadata=_metadata.unbeta(effective_metadata),
-            credentials=_credentials(protocol_options),
-        )
+        else:
+            return multi_callable(
+                request_iterator,
+                timeout=timeout,
+                metadata=_metadata.unbeta(effective_metadata),
+                credentials=_credentials(protocol_options),
+            )
     except grpc.RpcError as rpc_error_call:
         raise _abortion_error(rpc_error_call)
 
@@ -957,15 +961,16 @@ class _DynamicStub(face.DynamicStub):
         method_cardinality = self._cardinalities.get(attr)
         if method_cardinality is cardinality.Cardinality.UNARY_UNARY:
             return self._generic_stub.unary_unary(self._group, attr)
-        if method_cardinality is cardinality.Cardinality.UNARY_STREAM:
+        elif method_cardinality is cardinality.Cardinality.UNARY_STREAM:
             return self._generic_stub.unary_stream(self._group, attr)
-        if method_cardinality is cardinality.Cardinality.STREAM_UNARY:
+        elif method_cardinality is cardinality.Cardinality.STREAM_UNARY:
             return self._generic_stub.stream_unary(self._group, attr)
-        if method_cardinality is cardinality.Cardinality.STREAM_STREAM:
+        elif method_cardinality is cardinality.Cardinality.STREAM_STREAM:
             return self._generic_stub.stream_stream(self._group, attr)
-        raise AttributeError(
-            '_DynamicStub object has no attribute "%s"!' % attr
-        )
+        else:
+            raise AttributeError(
+                '_DynamicStub object has no attribute "%s"!' % attr
+            )
 
     def __enter__(self):
         return self

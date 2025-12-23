@@ -1,0 +1,75 @@
+{
+  "run_id": "90b0d1ce-21df-4bef-8f47-35dfc9b855eb",
+  "timestamp": "2025-12-21T01:27:04.884006",
+  "ticker": "AAPL",
+  "strategy": "Growth",
+  "horizon": "1 Year",
+  "rating": "Watch",
+  "overall_score": 59.34,
+  "factor_matrix": [
+    {
+      "Factor": "quality",
+      "Raw Score (0-100)": 100.0,
+      "Weight": 0.2,
+      "Weighted Contribution": 20.0
+    },
+    {
+      "Factor": "momentum",
+      "Raw Score (0-100)": 94.87,
+      "Weight": 0.2,
+      "Weighted Contribution": 18.97
+    },
+    {
+      "Factor": "growth",
+      "Raw Score (0-100)": 31.6,
+      "Weight": 0.4,
+      "Weighted Contribution": 12.64
+    },
+    {
+      "Factor": "risk",
+      "Raw Score (0-100)": 50.0,
+      "Weight": 0.1,
+      "Weighted Contribution": 5.0
+    },
+    {
+      "Factor": "value",
+      "Raw Score (0-100)": 27.3,
+      "Weight": 0.1,
+      "Weighted Contribution": 2.73
+    },
+    {
+      "Factor": "sentiment",
+      "Raw Score (0-100)": 50.0,
+      "Weight": 0.0,
+      "Weighted Contribution": 0.0
+    }
+  ],
+  "narrative": "Investment Narrative for AAPL:\n\nThe current recommendation is **Watch**, with an overall score of 59.3. The analysis is driven primarily by:\n\n- quality (weighted impact 20.0)\n- momentum (weighted impact 19.0)\n- growth (weighted impact 12.6)\n\nThis narrative reflects AI-assisted interpretation of quantitative signals and risk factors to support informed decision-making.",
+  "confidence": {
+    "score": 100.0,
+    "label": "High",
+    "signals": [
+      -1
+    ]
+  },
+  "news": [],
+  "audit": {
+    "metrics": {
+      "momentum": 36.92,
+      "volatility": 32.64,
+      "last_close": 273.67,
+      "pe_ratio": 36.6359,
+      "roe": 171.422,
+      "revenue_growth": 7.9
+    },
+    "weights": {
+      "value": 0.1,
+      "quality": 0.2,
+      "growth": 0.4,
+      "momentum": 0.2,
+      "risk": 0.1,
+      "sentiment": 0.0
+    },
+    "model": "gpt-5.2"
+  }
+}

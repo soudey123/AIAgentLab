@@ -1,0 +1,140 @@
+/* =========================
+   GLOBAL APP BACKGROUND
+========================= */
+.stApp {
+  background: #f6f8fb;
+  color: #0f172a;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont;
+}
+
+/* =========================
+   HEADERS
+========================= */
+h1, h2, h3 {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+h1 {
+  letter-spacing: -0.02em;
+}
+
+/* =========================
+   SUBHEADERS & LABELS
+========================= */
+label,
+.stMarkdown p {
+  color: #334155;
+  font-weight: 500;
+}
+
+/* =========================
+   INPUTS (TEXT / SELECT)
+========================= */
+.stTextInput input,
+.stSelectbox div[data-baseweb="select"] {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  padding: 0.5rem 0.75rem;
+}
+
+.stTextInput input:focus,
+.stSelectbox div[data-baseweb="select"]:focus-within {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.stButton button {
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 12px;
+  border: none;
+  padding: 0.6rem 1.6rem;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.25);
+}
+
+.stButton button:hover {
+  background: linear-gradient(90deg, #1d4ed8, #2563eb);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+  transform: translateY(-1px);
+}
+
+/* =========================
+   CARDS (RESULT PANELS)
+========================= */
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.4rem;
+  margin: 1.2rem 0;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  border: 1px solid #e2e8f0;
+}
+
+/* =========================
+   TABS
+========================= */
+button[data-baseweb="tab"] {
+  font-weight: 600;
+  color: #64748b;
+  padding: 0.5rem 0.8rem;
+}
+
+button[data-baseweb="tab"][aria-selected="true"] {
+  color: #2563eb;
+  border-bottom: 3px solid #2563eb;
+}
+
+/* =========================
+   DATAFRAMES / TABLES
+========================= */
+thead tr th {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  font-weight: 600;
+}
+
+tbody tr td {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* =========================
+   EXPANDERS (GLOSSARY)
+========================= */
+.stExpander {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+}
+
+/* =========================
+   INFO / WARNING BOXES
+========================= */
+.stAlert {
+  border-radius: 12px;
+}
+
+.stAlert > div {
+  font-weight: 500;
+}
+
+/* =========================
+   LINK / ICON COLOR
+========================= */
+a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,83 @@
+{
+  "run_id": "265ec3cc-6fc4-4453-91ad-0adf58db3f6d",
+  "timestamp": "2025-12-19T18:59:37.695268",
+  "ticker": "AAPL",
+  "strategy": "Balanced",
+  "horizon": "1m",
+  "rating": "Hold",
+  "overall_score": 60.33,
+  "factor_matrix": [
+    {
+      "Factor": "quality",
+      "Raw Score (0-100)": 100.0,
+      "Weight": 0.2,
+      "Weighted Contribution": 20.0
+    },
+    {
+      "Factor": "momentum",
+      "Raw Score (0-100)": 92.5,
+      "Weight": 0.2,
+      "Weighted Contribution": 18.5
+    },
+    {
+      "Factor": "risk",
+      "Raw Score (0-100)": 50.0,
+      "Weight": 0.2,
+      "Weighted Contribution": 10.0
+    },
+    {
+      "Factor": "growth",
+      "Raw Score (0-100)": 31.6,
+      "Weight": 0.2,
+      "Weighted Contribution": 6.32
+    },
+    {
+      "Factor": "value",
+      "Raw Score (0-100)": 27.54,
+      "Weight": 0.2,
+      "Weighted Contribution": 5.51
+    },
+    {
+      "Factor": "sentiment",
+      "Raw Score (0-100)": 50.0,
+      "Weight": 0.0,
+      "Weighted Contribution": 0.0
+    }
+  ],
+  "takeaways": {
+    "headline": "AAPL — Hold",
+    "drivers": [
+      "quality impact: 20.0",
+      "momentum impact: 18.5",
+      "risk impact: 10.0"
+    ],
+    "action": "Suggested action: Hold (decision-support only)"
+  },
+  "narrative": "Automated summary for AAPL:\n\nRating: Hold\nOverall Score: 60.3\n\nTop Drivers:\n- quality (impact 20.0)\n- momentum (impact 18.5)\n- risk (impact 10.0)\n\nNote: AI narrative unavailable in this run. Showing deterministic analysis only.",
+  "audit": {
+    "metrics": {
+      "momentum": 35.5,
+      "volatility": 32.62,
+      "last_close": 270.84,
+      "pe_ratio": 36.3056,
+      "roe": 171.422,
+      "revenue_growth": 7.9
+    },
+    "weights": {
+      "value": 0.2,
+      "quality": 0.2,
+      "growth": 0.2,
+      "momentum": 0.2,
+      "risk": 0.2,
+      "sentiment": 0.0
+    },
+    "news_source": "yfinance (pluggable)",
+    "model": "gpt-5.2",
+    "agents_used": [
+      "Market Analyst",
+      "Fundamentals Analyst",
+      "Risk Analyst",
+      "Portfolio Synthesizer"
+    ]
+  }
+}

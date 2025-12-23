@@ -77,7 +77,8 @@ class IterableConsumer(stream.Consumer):
                 self._condition.wait()
             if self._values:
                 return self._values.pop(0)
-            raise StopIteration()
+            else:
+                raise StopIteration()
 
 
 class ThreadSwitchingConsumer(stream.Consumer):
@@ -109,7 +110,7 @@ class ThreadSwitchingConsumer(stream.Consumer):
                 if terminate:
                     self._spinning = False
                     return
-                if self._values:
+                elif self._values:
                     value = self._values.pop(0)
                     terminate = not self._values and not self._active
                 elif not self._active:

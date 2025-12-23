@@ -1,0 +1,81 @@
+{
+  "run_id": "786be096-8703-4d2a-b2b6-a9ec4cfbbbe9",
+  "timestamp": "2025-12-19T18:25:18.293367",
+  "ticker": "TSLR",
+  "strategy": "Balanced",
+  "horizon": "1y",
+  "overall_score": 36.0,
+  "rating": "Avoid",
+  "factor_matrix": [
+    {
+      "Factor": "momentum",
+      "Raw Score (0-100)": 100.0,
+      "Weight": 0.2,
+      "Weighted Contribution": 20.0
+    },
+    {
+      "Factor": "value",
+      "Raw Score (0-100)": 50.0,
+      "Weight": 0.2,
+      "Weighted Contribution": 10.0
+    },
+    {
+      "Factor": "risk",
+      "Raw Score (0-100)": 30.0,
+      "Weight": 0.2,
+      "Weighted Contribution": 6.0
+    },
+    {
+      "Factor": "quality",
+      "Raw Score (0-100)": 0.0,
+      "Weight": 0.2,
+      "Weighted Contribution": 0.0
+    },
+    {
+      "Factor": "growth",
+      "Raw Score (0-100)": 0.0,
+      "Weight": 0.2,
+      "Weighted Contribution": 0.0
+    },
+    {
+      "Factor": "sentiment",
+      "Raw Score (0-100)": 50.0,
+      "Weight": 0.0,
+      "Weighted Contribution": 0.0
+    }
+  ],
+  "news": [],
+  "agent_narrative": "**Short Thesis for TSLR:**\n- The company's lack of earnings, reflected in a P/E ratio of 0.0, raises substantial concerns about its profitability and long-term viability.\n- TSLR's stagnation in revenue growth and operational performance indicates serious challenges, which may dissuade potential investors seeking growth metrics.\n- Although TSLR demonstrates strong momentum and high volatility, these traits can attract short-term traders; the underlying unsound financial fundamentals suggest caution for long-term investment.\n\n**Key Risks:**\n1. **Lack of Earnings and Revenue Growth:** TSLR's P/E ratio of 0.0 and revenue growth metric of 0.0 highlight the company's struggle with profitability and sales generation, presenting significant concerns for investors.\n2. **High Volatility:** With volatility at 128.39, TSLR experiences large price fluctuations that can lead to considerable losses if the momentum reverses, posing risks for cautious traders.\n3. **Negative Sentiment Among Investors:** A sentiment score of 50 suggests neutral investor perception, leading to unpredictable trading behavior, which might cause erratic price movements in response to market news.\n\n**Catalysts:**\n1. **Turnaround in Financial Performance:** Any significant improvement in TSLR's earnings or revenue growth could attract investor interest, reversing negative sentiment and improving the overall risk profile.\n2. **Stabilization of Volatility:** Should TSLR's volatility levels decrease, it could indicate a stabilization of the stock price, offering a potentially safer trading environment to attract investors.\n3. **Industry Developments:** Positive news or developments within TSLR’s operational context—such as partnerships, technological advancements, or market expansion—could significantly improve investor confidence and sentiment, impacting the stock positively.\n\n**Compliance Note:** This analysis serves as decision-support information and should not be regarded as financial advice. All investors should conduct their due diligence and consider their risk tolerance when making investment decisions.",
+  "audit": {
+    "metrics_used": {
+      "momentum": 67.92,
+      "volatility": 128.39,
+      "last_close": 36.64,
+      "pe_ratio": 0.0,
+      "roe": 0.0,
+      "revenue_growth": 0.0
+    },
+    "factor_scores": {
+      "value": 50.0,
+      "quality": 0.0,
+      "growth": 0.0,
+      "momentum": 100.0,
+      "risk": 30.0,
+      "sentiment": 50
+    },
+    "weights": {
+      "value": 0.2,
+      "quality": 0.2,
+      "growth": 0.2,
+      "momentum": 0.2,
+      "risk": 0.2,
+      "sentiment": 0.0
+    },
+    "crew_agents": [
+      "Market Analyst",
+      "Fundamentals Analyst",
+      "Risk Manager",
+      "Portfolio Strategist"
+    ]
+  }
+}

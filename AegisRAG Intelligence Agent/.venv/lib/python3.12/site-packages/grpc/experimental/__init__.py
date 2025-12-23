@@ -106,10 +106,15 @@ def wrap_server_method_handler(wrapper, handler):
             # NOTE(lidiz) _replace is a public API:
             #   https://docs.python.org/dev/library/collections.html
             return handler._replace(unary_unary=wrapper(handler.unary_unary))
-        return handler._replace(unary_stream=wrapper(handler.unary_stream))
-    if not handler.response_streaming:
-        return handler._replace(stream_unary=wrapper(handler.stream_unary))
-    return handler._replace(stream_stream=wrapper(handler.stream_stream))
+        else:
+            return handler._replace(unary_stream=wrapper(handler.unary_stream))
+    else:
+        if not handler.response_streaming:
+            return handler._replace(stream_unary=wrapper(handler.stream_unary))
+        else:
+            return handler._replace(
+                stream_stream=wrapper(handler.stream_stream)
+            )
 
 
 __all__ = (
@@ -126,9 +131,4 @@ if sys.version_info > (3, 6):
     from grpc._simple_stubs import unary_stream
     from grpc._simple_stubs import unary_unary
 
-    __all__ += (
-        "unary_unary",
-        "unary_stream",
-        "stream_unary",
-        "stream_stream",
-    )
+    __all__ = __all__ + (unary_unary, unary_stream, stream_unary, stream_stream)

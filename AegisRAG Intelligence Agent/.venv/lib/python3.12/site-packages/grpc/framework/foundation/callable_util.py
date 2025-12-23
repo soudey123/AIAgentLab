@@ -38,8 +38,8 @@ class Outcome(ABC):
     class Kind(enum.Enum):
         """Identifies the general kind of the outcome of some call."""
 
-        RETURNED = enum.auto()
-        RAISED = enum.auto()
+        RETURNED = object()
+        RAISED = object()
 
 
 class _EasyOutcome(

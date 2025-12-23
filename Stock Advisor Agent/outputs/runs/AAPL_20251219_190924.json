@@ -1,0 +1,74 @@
+{
+  "run_id": "d3ed6dfa-2baf-497a-a213-94c7d03caa82",
+  "timestamp": "2025-12-19T19:07:59.532235",
+  "ticker": "AAPL",
+  "rating": "Hold",
+  "overall_score": 60.33,
+  "factor_matrix": [
+    {
+      "Factor": "quality",
+      "Raw Score (0-100)": 100.0,
+      "Weight": 0.2,
+      "Weighted Contribution": 20.0
+    },
+    {
+      "Factor": "momentum",
+      "Raw Score (0-100)": 92.5,
+      "Weight": 0.2,
+      "Weighted Contribution": 18.5
+    },
+    {
+      "Factor": "risk",
+      "Raw Score (0-100)": 50.0,
+      "Weight": 0.2,
+      "Weighted Contribution": 10.0
+    },
+    {
+      "Factor": "growth",
+      "Raw Score (0-100)": 31.6,
+      "Weight": 0.2,
+      "Weighted Contribution": 6.32
+    },
+    {
+      "Factor": "value",
+      "Raw Score (0-100)": 27.54,
+      "Weight": 0.2,
+      "Weighted Contribution": 5.51
+    },
+    {
+      "Factor": "sentiment",
+      "Raw Score (0-100)": 50.0,
+      "Weight": 0.0,
+      "Weighted Contribution": 0.0
+    }
+  ],
+  "narrative": "AI Investment Narrative for AAPL:\n\nThe recommendation is **Hold** with an overall score of 60.3. The most influential drivers are:\n\n- quality contributed 20.0\n- momentum contributed 18.5\n- risk contributed 10.0\n\nThis narrative is generated using AI-assisted interpretation to support informed decision-making.",
+  "confidence": {
+    "score": 100.0,
+    "label": "High",
+    "signals": [
+      0,
+      0,
+      0
+    ]
+  },
+  "audit": {
+    "metrics": {
+      "momentum": 35.5,
+      "volatility": 32.62,
+      "last_close": 270.83,
+      "pe_ratio": 36.305,
+      "roe": 171.422,
+      "revenue_growth": 7.9
+    },
+    "weights": {
+      "value": 0.2,
+      "quality": 0.2,
+      "growth": 0.2,
+      "momentum": 0.2,
+      "risk": 0.2,
+      "sentiment": 0.0
+    },
+    "model": "gpt-5.2"
+  }
+}

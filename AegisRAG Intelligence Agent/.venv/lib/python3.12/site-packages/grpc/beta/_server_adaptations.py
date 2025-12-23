@@ -54,8 +54,9 @@ class _FaceServicerContext(face.ServicerContext):
         return self._servicer_context.time_remaining()
 
     def add_abortion_callback(self, abortion_callback):
-        error_msg = "add_abortion_callback no longer supported server-side!"
-        raise NotImplementedError(error_msg)
+        raise NotImplementedError(
+            "add_abortion_callback no longer supported server-side!"
+        )
 
     def cancel(self):
         self._servicer_context.cancel()
@@ -263,7 +264,7 @@ class _SimpleMethodHandler(
     pass
 
 
-def _simple_method_handler(  # noqa: PLR0911
+def _simple_method_handler(
     implementation, request_deserializer, response_serializer
 ):
     if implementation.style is style.Service.INLINE:
@@ -278,7 +279,7 @@ def _simple_method_handler(  # noqa: PLR0911
                 None,
                 None,
             )
-        if implementation.cardinality is cardinality.Cardinality.UNARY_STREAM:
+        elif implementation.cardinality is cardinality.Cardinality.UNARY_STREAM:
             return _SimpleMethodHandler(
                 False,
                 True,
@@ -289,7 +290,7 @@ def _simple_method_handler(  # noqa: PLR0911
                 None,
                 None,
             )
-        if implementation.cardinality is cardinality.Cardinality.STREAM_UNARY:
+        elif implementation.cardinality is cardinality.Cardinality.STREAM_UNARY:
             return _SimpleMethodHandler(
                 True,
                 False,
@@ -302,7 +303,9 @@ def _simple_method_handler(  # noqa: PLR0911
                 ),
                 None,
             )
-        if implementation.cardinality is cardinality.Cardinality.STREAM_STREAM:
+        elif (
+            implementation.cardinality is cardinality.Cardinality.STREAM_STREAM
+        ):
             return _SimpleMethodHandler(
                 True,
                 True,
@@ -327,7 +330,7 @@ def _simple_method_handler(  # noqa: PLR0911
                 None,
                 None,
             )
-        if implementation.cardinality is cardinality.Cardinality.UNARY_STREAM:
+        elif implementation.cardinality is cardinality.Cardinality.UNARY_STREAM:
             return _SimpleMethodHandler(
                 False,
                 True,
@@ -338,7 +341,7 @@ def _simple_method_handler(  # noqa: PLR0911
                 None,
                 None,
             )
-        if implementation.cardinality is cardinality.Cardinality.STREAM_UNARY:
+        elif implementation.cardinality is cardinality.Cardinality.STREAM_UNARY:
             return _SimpleMethodHandler(
                 True,
                 False,
@@ -349,7 +352,9 @@ def _simple_method_handler(  # noqa: PLR0911
                 _adapt_stream_unary_event(implementation.stream_unary_event),
                 None,
             )
-        if implementation.cardinality is cardinality.Cardinality.STREAM_STREAM:
+        elif (
+            implementation.cardinality is cardinality.Cardinality.STREAM_STREAM
+        ):
             return _SimpleMethodHandler(
                 True,
                 True,
@@ -401,12 +406,13 @@ class _GenericRpcHandler(grpc.GenericRpcHandler):
                 self._request_deserializers.get(handler_call_details.method),
                 self._response_serializers.get(handler_call_details.method),
             )
-        if self._multi_method_implementation is None:
+        elif self._multi_method_implementation is None:
             return None
-        try:
-            return None  # TODO(nathaniel): call the multimethod.
-        except face.NoSuchMethodError:
-            return None
+        else:
+            try:
+                return None  # TODO(nathaniel): call the multimethod.
+            except face.NoSuchMethodError:
+                return None
 
 
 class _Server(interfaces.Server):

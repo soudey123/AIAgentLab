@@ -1,88 +1,93 @@
 # 🛡️ AegisRAG Intelligence Agent
-**Evidence‑First RAG with LangGraph + LangChain**
 
-![Python](https://img.shields.io/badge/python-3.11%2B-blue)
-![LangChain](https://img.shields.io/badge/LangChain-enabled-green)
-![LangGraph](https://img.shields.io/badge/LangGraph-orchestration-purple)
-![VectorDB](https://img.shields.io/badge/VectorDB-Chroma-orange)
-![Status](https://img.shields.io/badge/status-active-success)
-![License](https://img.shields.io/badge/license-MIT-lightgrey)
-
-AegisRAG is a **guarded, evidence‑first Retrieval‑Augmented Generation (RAG) system** built using **LangGraph** and **LangChain**.  
-It is designed for **research and enterprise workflows** where **grounding, citations, and refusal on weak evidence** matter.
-
-> 🚫 This project does **NOT** use CrewAI.  
-> ✅ Orchestration is done via **LangGraph**.
-
-![Application](https://github.com/soudey123/AIAgentLab/blob/main/AegisRAG%20Intelligence%20Agent/App%20Screenshot%201.png)
-
-![Application](https://github.com/soudey123/AIAgentLab/blob/main/AegisRAG%20Intelligence%20Agent/App%20Screenshot%201.png)
+**AegisRAG** is an evidence-first, guardrailed Retrieval-Augmented Generation (RAG) system designed for research, enterprise, and compliance-heavy use cases.  
+It combines **LangGraph**, **LangChain**, **Chroma**, and optional **Opik (Comet)** evaluation to deliver grounded answers with traceable sources.
 
 ---
 
-## ✨ Key Features
+## ✨ Key Capabilities
 
-- 🔎 **Public data ingestion** from **arXiv + Europe PMC (PubMed)**
-- 🧠 **Vector search** using **Chroma**
-- 🧩 **LangGraph workflow**: Retrieve → Synthesize
-- 🛡️ **Guardrails**: context‑only answers, mandatory citations
-- ❌ Explicit **“Insufficient evidence”** responses
-- 🖥️ **CLI + Streamlit UI**
-- 📄 **Markdown reports** with sources
+- 🔎 **Multi-source ingestion**: arXiv + Europe PMC (PubMed Central)
+- 🧠 **Evidence-first RAG**: answers strictly grounded in retrieved documents
+- 📚 **Citations & sources**: automatic source normalization
+- 🛡️ **Hallucination-aware**: optional Opik evaluation (hallucination, relevance, context precision/recall)
+- 🧩 **Composable graph**: LangGraph-based retrieval → synthesis → evaluation
+- 🎨 **Streamlit UI**: clean, colorful interface for demos and internal tools
+- 🏢 **Enterprise-ready**: works offline from local Chroma vector store
 
 ---
 
-## 🧠 System Architecture
+## 🏗️ Architecture Overview
 
-![Workflow](https://github.com/soudey123/AIAgentLab/blob/main/AegisRAG%20Intelligence%20Agent/AEGISRAG%20Agent%20Workflow.png)
+```mermaid
+flowchart TD
+    Q[User Question] --> UI[Streamlit App]
+    UI --> G[LangGraph RAG Pipeline]
+
+    G --> R[Retriever]
+    R -->|Top-k Docs| C[Context Builder]
+    C --> S[LLM Synthesizer]
+
+    S --> O[Optional Opik Evaluation]
+    O -->|Scores| UI
+
+    S --> M[Markdown Report]
+```
 
 ---
 
 ## 📁 Project Structure
 
 ```
-AegisRAG/
-├── app.py                   # Streamlit UI
+AegisRAG Intelligence Agent/
+├── app.py                     # Streamlit UI
 ├── requirements.txt
-├── .env                     # secrets (DO NOT COMMIT)
-├── chroma_db/               # persisted vector store
+├── .env                       # API keys (not committed)
+├── output/
+│   └── report_*.md
 └── src/
-    ├── main_ingest.py       # data ingestion
-    ├── main_query.py        # CLI query runner
-    ├── collectors/          # arXiv + Europe PMC
-    ├── ingest/              # embedding + indexing
-    ├── rag/                 # retriever
-    └── graph/               # LangGraph workflow
+    ├── main_ingest.py          # Ingest arXiv + Europe PMC
+    ├── main_query.py           # CLI query runner
+    ├── common.py               # Shared constants
+    ├── collectors/
+    │   ├── arxiv.py
+    │   └── europe_pmc.py
+    ├── ingest/
+    │   └── index.py            # Chunk + embed into Chroma
+    ├── rag/
+    │   └── retriever.py        # Vector retrieval (returns Documents)
+    ├── graph/
+    │   └── rag_graph.py        # LangGraph RAG pipeline
+    └── evaluation/
+        └── opik_eval.py        # Optional Opik evaluation
 ```
 
 ---
 
-## ⚙️ Setup
+## 🚀 Quickstart
 
-### 1️⃣ Virtual Environment
+### 1️⃣ Create virtual environment
 
 ```bash
-python3 -m venv .venv
+python3.12 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 2️⃣ Install Dependencies
+### 2️⃣ Install dependencies
 
 ```bash
 pip install -r requirements.txt
-pip install -U langchain-chroma
 ```
 
----
-
-## 🔐 Configuration
-
-Create `.env` in project root:
+### 3️⃣ Configure `.env`
 
 ```env
-OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxx
-CHROMA_DIR=./chroma_db
-CHROMA_COLLECTION=research_corpus
+OPENAI_API_KEY=sk-...
+OPENAI_MODEL=gpt-5.2
+
+# Optional: Opik (Comet)
+OPIK_API_KEY=your_opik_key
+OPIK_WORKSPACE=your_workspace
 ```
 
 ---
@@ -93,29 +98,17 @@ CHROMA_COLLECTION=research_corpus
 python -m src.main_ingest
 ```
 
-Clean rebuild:
-
-```bash
-rm -rf chroma_db
-python -m src.main_ingest
-```
-
 ---
 
-## 🔎 Query (CLI)
+## ❓ Query via CLI
 
 ```bash
 python -m src.main_query
 ```
 
-Example:
-```
-What evaluation methods are commonly used for retrieval‑augmented generation systems?
-```
-
 ---
 
-## 🖥️ Streamlit UI
+## 🖥️ Run Streamlit App
 
 ```bash
 streamlit run app.py
@@ -123,33 +116,23 @@ streamlit run app.py
 
 ---
 
-## 🛡️ Guardrails Philosophy
+## 🛡️ Opik (Comet) Evaluation
 
-AegisRAG enforces:
-
-- Context‑only answers
-- Mandatory citations
-- Explicit refusal when evidence is weak
-- Separation of retrieval vs synthesis
-
-This makes it suitable for:
-- Research assistants
-- Compliance‑sensitive domains
-- Enterprise knowledge systems
+When enabled, AegisRAG can score outputs for hallucination, relevance, and context quality.  
+Evaluation is optional and non-blocking.
 
 ---
 
-## 🚀 Roadmap
+## 📄 Output Format
 
-- Evidence strength grading (strong / medium / weak)
-- Query rewriter agent
-- Source filters
-- Evaluation harness
-- Scheduled ingestion
-- PDF ingestion
+Answers are returned as Markdown with sections:
+- Answer
+- Evidence
+- What’s missing / Unknowns
+- Sources
 
 ---
 
 ## 📜 License
 
-MIT License
+MIT

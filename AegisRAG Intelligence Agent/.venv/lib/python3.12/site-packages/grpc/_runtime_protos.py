@@ -66,7 +66,8 @@ def _call_with_lazy_import(
         if _has_runtime_proto_symbols(grpc_tools.protoc):
             fn = getattr(grpc_tools.protoc, "_" + fn_name)
             return fn(protobuf_path)
-        raise NotImplementedError(_UNINSTALLED_TEMPLATE.format(fn_name))
+        else:
+            raise NotImplementedError(_UNINSTALLED_TEMPLATE.format(fn_name))
 
 
 def protos(protobuf_path):  # pylint: disable=unused-argument
@@ -87,7 +88,7 @@ def protos(protobuf_path):  # pylint: disable=unused-argument
 
     The returned module object corresponds to the _pb2.py file generated
     by protoc. The path is expected to be relative to an entry on sys.path
-    and all transitive dependencies of the file should also be resolvable
+    and all transitive dependencies of the file should also be resolveable
     from an entry on sys.path.
 
     To completely disable the machinery behind this function, set the
@@ -95,7 +96,7 @@ def protos(protobuf_path):  # pylint: disable=unused-argument
 
     Args:
       protobuf_path: The path to the .proto file on the filesystem. This path
-        must be resolvable from an entry on sys.path and so must all of its
+        must be resolveable from an entry on sys.path and so must all of its
         transitive dependencies.
 
     Returns:
@@ -124,7 +125,7 @@ def services(protobuf_path):  # pylint: disable=unused-argument
 
     The returned module object corresponds to the _pb2_grpc.py file generated
     by protoc. The path is expected to be relative to an entry on sys.path
-    and all transitive dependencies of the file should also be resolvable
+    and all transitive dependencies of the file should also be resolveable
     from an entry on sys.path.
 
     To completely disable the machinery behind this function, set the
@@ -132,7 +133,7 @@ def services(protobuf_path):  # pylint: disable=unused-argument
 
     Args:
       protobuf_path: The path to the .proto file on the filesystem. This path
-        must be resolvable from an entry on sys.path and so must all of its
+        must be resolveable from an entry on sys.path and so must all of its
         transitive dependencies.
 
     Returns:
@@ -155,7 +156,7 @@ def protos_and_services(protobuf_path):  # pylint: disable=unused-argument
 
     Args:
       protobuf_path: The path to the .proto file on the filesystem. This path
-        must be resolvable from an entry on sys.path and so must all of its
+        must be resolveable from an entry on sys.path and so must all of its
         transitive dependencies.
 
     Returns:

@@ -67,7 +67,8 @@ _ERROR_MESSAGE_PORT_BINDING_FAILED = (
 def encode(s: AnyStr) -> bytes:
     if isinstance(s, bytes):
         return s
-    return s.encode("utf8")
+    else:
+        return s.encode("utf8")
 
 
 def decode(b: AnyStr) -> str:
@@ -83,11 +84,12 @@ def _transform(
 ) -> Any:
     if transformer is None:
         return message
-    try:
-        return transformer(message)
-    except Exception:  # pylint: disable=broad-except
-        _LOGGER.exception(exception_message)
-        return None
+    else:
+        try:
+            return transformer(message)
+        except Exception:  # pylint: disable=broad-except
+            _LOGGER.exception(exception_message)
+            return None
 
 
 def serialize(message: Any, serializer: Optional[SerializingFunction]) -> bytes:
