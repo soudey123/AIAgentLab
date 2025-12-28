@@ -1,0 +1,1076 @@
+{
+  "name": "Multi-Agent RAG Intelligence Research System",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "bdddceba-6115-499f-8d83-a85f03568d47",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        9936,
+        896
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "githubRepoUrl",
+              "value": "https://github.com/soudey123/AIAgentLab/tree/main/AegisRAG%20Intelligence%20Agent",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "researchTopic",
+              "value": "Multi-agent RAG intelligence research system",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "c9161482-7f74-41be-92c5-01156d201ce7",
+      "name": "Workflow Configuration",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        10288,
+        896
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.githubRepoUrl }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/vnd.github.v3+json"
+            },
+            {
+              "name": "User-Agent",
+              "value": "n8n-workflow"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f65a22ac-1f02-4c10-9ba7-cf1e5a4a3b80",
+      "name": "Fetch GitHub Repository Data",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        10576,
+        896
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "memoryKey": {
+          "__rl": true,
+          "mode": "id",
+          "value": "aegis_rag_knowledge_base"
+        }
+      },
+      "id": "67f777a9-c406-4554-b98a-54382da8ef7e",
+      "name": "Knowledge Base Vector Store",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        11504,
+        896
+      ]
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "textSplittingMode": "custom",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "name",
+                "value": "={{ $json.name }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "4ef3216c-2f61-41cf-8996-b149b1ec83ab",
+      "name": "Document Loader",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        11600,
+        1120
+      ]
+    },
+    {
+      "parameters": {
+        "chunkOverlap": 200,
+        "options": {}
+      },
+      "id": "85818185-2354-4d28-938f-80542ff8bde1",
+      "name": "Text Splitter",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        11680,
+        1328
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "5e7e0308-d961-4f89-bebe-a369d83af0f2",
+      "name": "OpenAI Embeddings",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        11472,
+        1120
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "2rgnOnI1f1h7eWgc",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.researchTopic }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are the Orchestrator Agent for the AegisRAG Intelligence Research System. Your role is to coordinate multiple specialized AI agents to conduct comprehensive intelligence research and analysis with access to academic journals and scholarly databases. Your task is to: 1. Understand the research topic or query provided 2. Call the Research Agent Tool to gather information from academic databases (arXiv, Crossref, Semantic Scholar), Wikipedia for foundational knowledge, Web search for current information, and Full-text extraction from academic papers 3. Call the RAG Knowledge Retrieval Tool to search the internal knowledge base for relevant context 4. Call the Analysis Agent Tool to analyze and synthesize the gathered information 5. Return a comprehensive, well-structured research report in JSON format with proper academic citations. Coordination Guidelines: Break down complex queries into specific sub-tasks for each agent, Ensure all relevant sources are consulted prioritizing peer-reviewed academic sources for research topics, Request the Research Agent to provide full citations for all academic papers, Synthesize findings from multiple agents into coherent insights, Maintain context across agent interactions. Return your final output as structured JSON with the following fields: summary (Brief overview of findings), key_insights (Array of main discoveries), sources (Array of sources consulted with full citations), academic_references (Array of academic papers with DOI/URLs), recommendations (Actionable recommendations based on research)"
+        }
+      },
+      "id": "bbdbb4b7-46af-43f0-b8a3-e0da972144cf",
+      "name": "Orchestrator Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        12992,
+        896
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "id": "772b76a6-5a7b-47c8-b70f-328d4b0bc6a6",
+      "name": "OpenAI Chat Model - Orchestrator",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        11968,
+        1120
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "2rgnOnI1f1h7eWgc",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "1ce6b61e-6d73-4ff8-9bf7-c7880c1f6301",
+      "name": "Conversation Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        12096,
+        1120
+      ]
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"summary\": {\n      \"type\": \"string\",\n      \"description\": \"Brief overview of research findings\"\n    },\n    \"key_insights\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"Main discoveries and insights\"\n    },\n    \"sources\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"Sources consulted during research\"\n    },\n    \"recommendations\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"Actionable recommendations\"\n    }\n  },\n  \"required\": [\"summary\", \"key_insights\", \"sources\", \"recommendations\"]\n}"
+      },
+      "id": "03ac3fd3-b103-4e03-a613-7e913c753057",
+      "name": "Structured Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        13968,
+        1120
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "id": "6e7a7a72-dcbc-4363-a5de-ac80cc4b3aba",
+      "name": "OpenAI Chat Model - Research",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        13712,
+        1328
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "2rgnOnI1f1h7eWgc",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"findings\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"Key facts discovered\"\n    },\n    \"sources\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"Source references with citations\"\n    },\n    \"academic_papers\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"title\": {\"type\": \"string\"},\n          \"authors\": {\"type\": \"string\"},\n          \"year\": {\"type\": \"string\"},\n          \"doi\": {\"type\": \"string\"},\n          \"url\": {\"type\": \"string\"},\n          \"abstract\": {\"type\": \"string\"}\n        }\n      },\n      \"description\": \"Academic papers with full citations\"\n    },\n    \"confidence\": {\n      \"type\": \"string\",\n      \"enum\": [\"high\", \"medium\", \"low\"],\n      \"description\": \"Confidence level\"\n    },\n    \"gaps\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"Information gaps\"\n    }\n  },\n  \"required\": [\"findings\", \"sources\", \"confidence\"]\n}"
+      },
+      "id": "1d7f3a7b-a06d-4b73-bef1-62b2923bf21b",
+      "name": "Research Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        13952,
+        1328
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Analysis_Agent_Tool",
+        "text": "={{ $fromAI('analysis_input', 'The research data or information to analyze', 'string') }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are an Analysis Agent specialized in synthesizing research findings and generating actionable insights. Your capabilities: Identify patterns and trends in data, Compare and contrast different sources, Draw evidence-based conclusions, Generate strategic recommendations, Assess reliability and credibility of information. Your task: 1. Review all research findings provided 2. Identify key patterns, trends, and relationships 3. Synthesize information from multiple sources 4. Generate insights and recommendations 5. Assess the quality and reliability of the analysis. Return your analysis as JSON with: patterns (Array of identified patterns or trends), insights (Array of analytical insights), contradictions (Any conflicting information found), recommendations (Strategic recommendations based on analysis), confidence_score (Overall confidence in the analysis 0-100)"
+        }
+      },
+      "id": "7fa7d927-70db-4c4a-8931-b5a5431488f4",
+      "name": "Analysis Agent Tool",
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 3,
+      "position": [
+        12224,
+        1120
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "id": "bb025d9d-3aa8-495e-9eeb-0786a55e45e2",
+      "name": "OpenAI Chat Model - Analysis",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        12240,
+        1328
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "2rgnOnI1f1h7eWgc",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"patterns\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"Identified patterns or trends\"\n    },\n    \"insights\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"Analytical insights\"\n    },\n    \"contradictions\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"Conflicting information\"\n    },\n    \"recommendations\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      },\n      \"description\": \"Strategic recommendations\"\n    },\n    \"confidence_score\": {\n      \"type\": \"number\",\n      \"minimum\": 0,\n      \"maximum\": 100,\n      \"description\": \"Confidence score\"\n    }\n  },\n  \"required\": [\"patterns\", \"insights\", \"recommendations\", \"confidence_score\"]\n}"
+      },
+      "id": "8035727b-03aa-47ec-9e4d-0ca323b32704",
+      "name": "Analysis Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        12384,
+        1328
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "d8e1e92b-dfd7-4269-a7e9-89017a5083e8",
+      "name": "OpenAI Embeddings - Retrieval",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        12592,
+        1328
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "2rgnOnI1f1h7eWgc",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Define allowed text-based file extensions\nconst allowedExtensions = ['.py', '.js', '.md', '.txt', '.json', '.yaml', '.yml', '.csv', '.html', '.css', '.sql', '.sh', '.bat', '.ts', '.jsx', '.tsx', '.xml', '.ini', '.conf', '.cfg', '.log', '.env', '.gitignore', '.dockerfile', '.toml', '.rst', '.tex'];\n\n// Filter files: must be a file type, have download_url, not start with '.', and have an allowed extension\nconst files = $input.all().filter(item => {\n  if (item.json.type !== 'file' || !item.json.download_url || item.json.name.startsWith('.')) {\n    return false;\n  }\n  \n  const fileName = item.json.name.toLowerCase();\n  return allowedExtensions.some(ext => fileName.endsWith(ext));\n});\n\nreturn [{ json: { files: files.map(f => ({ name: f.json.name, path: f.json.path, download_url: f.json.download_url })) } }];"
+      },
+      "id": "ab44814c-022a-4c51-890d-878edfe94c17",
+      "name": "Filter and Process Files",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        10800,
+        896
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "files",
+        "options": {}
+      },
+      "id": "8bd1e72e-5042-4ff5-a8b1-042edc914cc7",
+      "name": "Split Files",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        11024,
+        896
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.download_url }}",
+        "options": {
+          "response": {
+            "response": {}
+          }
+        }
+      },
+      "id": "64cb8ed2-b849-4df2-a365-fb33917e7636",
+      "name": "Download File Content",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        11248,
+        896
+      ]
+    },
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi there! 👋\nHow can I assist you with your AI research today?",
+        "availableInChat": true,
+        "agentName": "AegisRAG Intelligence Agent",
+        "options": {
+          "loadPreviousSession": "memory"
+        }
+      },
+      "id": "4330703d-0bed-4225-a5ee-8356ead1863c",
+      "name": "Chat Interface",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        9872,
+        1088
+      ],
+      "webhookId": "654235cd-b609-4ffb-b2f2-bbda2781bff8"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are an intelligent research assistant that can answer questions using multiple sources including academic journals and scholarly databases.\n\n🔴 CRITICAL RULE - YOU MUST FOLLOW THIS FOR ALL RESEARCH QUESTIONS:\n\nFor ANY question about research, papers, publications, academic topics, or requests like 'top papers', 'recent papers', 'papers from [year]':\n\n1. YOU MUST IMMEDIATELY call Research_Agent_Tool FIRST\n2. Pass the user's query directly to Research_Agent_Tool\n3. Research_Agent_Tool will handle calling arXiv, Crossref, Semantic Scholar, and Jina AI\n4. DO NOT try to call arXiv, Crossref, Semantic Scholar, or Jina AI directly yourself\n5. Wait for Research_Agent_Tool to return results before responding\n\nExample flow:\nUser asks: 'What are the top AI papers for 2025?'\n→ You call: Research_Agent_Tool with query 'top AI papers for 2025'\n→ Research_Agent_Tool calls arXiv, Crossref, Semantic Scholar, Jina AI\n→ Research_Agent_Tool returns structured results with papers\n→ You format and present the results to the user\n\nAfter Research_Agent_Tool returns results, you may optionally call:\n- RAG_Knowledge_Retrieval_Tool for internal knowledge\n- Wikipedia_Research_Tool for foundational information\n- SerpApi_Research_Tool or Web_Search_Tool for additional context\n\nWhen presenting results, ALWAYS include:\n- Full citation (Author(s), Year, Title, Journal/Conference)\n- Direct clickable links to papers (DOI URLs, arXiv URLs)\n- Brief summary of each paper's relevance\n- Key findings from the full paper content\n\nFormat paper references as:\n[Title](URL) - Authors (Year)\n\n🚨 ENFORCEMENT: If you respond to a research question without calling Research_Agent_Tool, you have FAILED. Research_Agent_Tool is your PRIMARY tool for all academic research queries."
+        }
+      },
+      "id": "48466649-eff2-43b9-aa9c-20467c2dafc7",
+      "name": "Chat Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        10224,
+        1088
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "RAG_Knowledge_Retrieval_Tool",
+        "memoryKey": {
+          "__rl": true,
+          "mode": "id",
+          "value": "aegis_rag_knowledge_base"
+        },
+        "topK": 5
+      },
+      "id": "79af84fb-63c9-440b-9234-c694be9d44e7",
+      "name": "RAG_Knowledge_Retrieval_Tool",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreInMemory",
+      "typeVersion": 1.3,
+      "position": [
+        12512,
+        1120
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Web_Search_Tool",
+        "url": "=https://api.duckduckgo.com/?q={{ $fromAI('search_query', 'The search query', 'string') }}&format=json",
+        "options": {}
+      },
+      "id": "116faca3-ec46-4bbb-b2e9-8d4c3a2bdf00",
+      "name": "Web_Search_Tool",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        12800,
+        1120
+      ]
+    },
+    {
+      "parameters": {
+        "options": {
+          "gl": "us",
+          "device": "desktop",
+          "no_cache": false,
+          "google_domain": "google.com",
+          "hl": "en"
+        }
+      },
+      "id": "f8d5ad5d-8557-49e3-95a4-67818033edd2",
+      "name": "SerpApi_Research_Tool",
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        12928,
+        1120
+      ],
+      "credentials": {
+        "serpApi": {
+          "id": "mV7NJaMLXv3mIhwR",
+          "name": "SerpAPI account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "d520cc4e-35d7-44cc-9bf4-dfe22d73672d",
+      "name": "Wikipedia_Research_Tool",
+      "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
+      "typeVersion": 1,
+      "position": [
+        13056,
+        1120
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Crossref_Academic_Papers_Tool - Search for peer-reviewed academic journal articles with DOI links",
+        "url": "=https://api.crossref.org/works?query={{ encodeURIComponent($fromAI('search_query', 'Academic search query or topic', 'string')) }}&rows=10&sort=published&order=desc",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "n8n-research-agent"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "390de8a7-ff3b-4382-bfd5-7064e37b04cb",
+      "name": "Crossref_Academic_Papers_Tool",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        13184,
+        1328
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "arXiv_Research_Papers_Tool - Search arXiv for preprints and research papers",
+        "url": "=http://export.arxiv.org/api/query?search_query=all:{{ encodeURIComponent($fromAI('search_query', 'Research topic or keywords for arXiv search', 'string')) }}&start=0&max_results=10&sortBy=submittedDate&sortOrder=descending",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/atom+xml"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "640db26f-bf71-4dc1-91cc-4cae396bd4d7",
+      "name": "arXiv_Research_Papers_Tool",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        13312,
+        1328
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Semantic_Scholar_Tool - Search Semantic Scholar for highly-cited influential academic papers",
+        "url": "=https://api.semanticscholar.org/graph/v1/paper/search?query={{ encodeURIComponent($fromAI('search_query', 'Academic research query', 'string')) }}&limit=10&fields=title,abstract,authors,year,citationCount,url,externalIds&sort=citationCount:desc",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bf6672cd-712b-48bb-9f2a-3ad4d36aefa1",
+      "name": "Semantic_Scholar_Tool",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        13440,
+        1328
+      ]
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Jina_AI_Content_Extraction_Tool - Extract full text content from academic paper URLs",
+        "url": "={{ $fromAI('url', 'URL of the academic paper or article to extract content from', 'string') }}",
+        "options": {},
+        "requestOptions": {}
+      },
+      "id": "1f1b3ca6-374b-46ff-be93-5d86e03d2f47",
+      "name": "Jina_AI_Content_Extraction_Tool",
+      "type": "n8n-nodes-base.jinaAiTool",
+      "typeVersion": 1,
+      "position": [
+        13568,
+        1328
+      ],
+      "credentials": {
+        "jinaAiApi": {
+          "id": "5nap1qy5zDW616az",
+          "name": "Jina AI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Research_Agent_Tool",
+        "text": "={{ $fromAI('research_query', 'The research query or topic to investigate', 'string') }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a specialized Research Agent that gathers information from multiple academic and research sources.\n\nYour capabilities:\n- Search arXiv for preprints and research papers in physics, mathematics, computer science, quantitative biology, and biomedical engineering\n- Query Crossref for peer-reviewed academic journal articles with DOI links\n- Search Semantic Scholar for highly-cited influential academic papers\n- Use Jina AI Content Extraction Tool to retrieve full-text content from academic paper URLs\n- Gather information from Wikipedia for foundational knowledge\n- Perform web searches for current information\n\nYour task - YOU MUST FOLLOW THIS EXACT SEQUENCE:\n1. For ANY research query, you MUST call these tools in order:\n   a) arXiv_Research_Papers_Tool - Search for preprints and research papers (REQUIRED - CALL FIRST)\n   b) Crossref_Academic_Papers_Tool - Search for peer-reviewed journal articles (REQUIRED - CALL SECOND)\n   c) Semantic_Scholar_Tool - Search for highly-cited papers (REQUIRED - CALL THIRD)\n   d) For each paper URL found in results, call Jina_AI_Content_Extraction_Tool to get full text (REQUIRED)\n2. Call Wikipedia_Research_Tool for foundational context (OPTIONAL)\n3. Compile all findings with proper citations\n\nFor queries about 'top papers' or 'recent papers' from a specific year:\n- Extract the year from the query\n- Pass search queries like 'artificial intelligence 2025' to arXiv\n- Include the year in searches for Crossref and Semantic Scholar\n\nFor each academic paper found, provide:\n- Full citation (Authors, Year, Title, Journal/Conference)\n- Direct clickable links (DOI URLs, arXiv URLs)\n- Abstract or summary\n- Key findings from full-text content (via Jina AI)\n\nReturn your research findings as JSON with:\n- findings: Array of key facts discovered\n- sources: Array of source references with full citations\n- academic_papers: Array of papers with title, authors, year, doi, url, and abstract\n- confidence: Confidence level (high/medium/low)\n- gaps: Any information gaps identified\n\n🚨 CRITICAL: You MUST call arXiv, Crossref, Semantic Scholar, and Jina AI tools for EVERY research query. Do not skip any of these tools."
+        }
+      },
+      "id": "14889976-fc7a-41bf-a572-cdb321946843",
+      "name": "Research Agent Tool",
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 3,
+      "position": [
+        13680,
+        1120
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose"
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $json.academic_papers }}",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "2bffdb0b-5d36-4ae6-869f-a608cee087b6",
+      "name": "Check If Papers Found",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        10576,
+        1088
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "output",
+              "value": "It seems that I wasn't able to find specific papers or a comprehensive list of top AI research papers for the year 2025 through the available tools. Since this is a future date, no concrete papers may have been published or recognized yet for that year. Typically, leading AI research papers for a year become more apparent as major conferences and journals release their accepted works. If you're interested in AI research as of now, I can provide information on top AI papers published recently, or important conferences to look out for in 2025. Would you like that instead?",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "47e0edd3-5843-410f-8209-21a20c7574a8",
+      "name": "Fallback Message for Future Date",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        10800,
+        1088
+      ]
+    }
+  ],
+  "pinData": {
+    "Chat Interface": [
+      {
+        "json": {
+          "action": "sendMessage",
+          "sessionId": "4078279e-03f2-49bb-9770-c38e61efb616",
+          "chatInput": "How multi-agent RAG systems are being used in addressing biomedical engineering questions?"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Workflow Configuration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Workflow Configuration": {
+      "main": [
+        [
+          {
+            "node": "Fetch GitHub Repository Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Document Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Document Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Knowledge Base Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Embeddings": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Knowledge Base Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Knowledge Base Vector Store": {
+      "main": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model - Orchestrator": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Chat Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conversation Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Chat Interface",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analysis Agent Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model - Analysis": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Analysis Agent Tool",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analysis Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Analysis Agent Tool",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Embeddings - Retrieval": {
+      "ai_embedding": [
+        [
+          {
+            "node": "RAG_Knowledge_Retrieval_Tool",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch GitHub Repository Data": {
+      "main": [
+        [
+          {
+            "node": "Filter and Process Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter and Process Files": {
+      "main": [
+        [
+          {
+            "node": "Split Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Files": {
+      "main": [
+        [
+          {
+            "node": "Download File Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download File Content": {
+      "main": [
+        [
+          {
+            "node": "Knowledge Base Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat Interface": {
+      "main": [
+        [
+          {
+            "node": "Chat Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RAG_Knowledge_Retrieval_Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "Chat Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Web_Search_Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "Chat Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SerpApi_Research_Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "Chat Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wikipedia_Research_Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Chat Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crossref_Academic_Papers_Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "Research Agent Tool",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "arXiv_Research_Papers_Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "Research Agent Tool",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Semantic_Scholar_Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "Research Agent Tool",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Jina_AI_Content_Extraction_Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "Research Agent Tool",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model - Research": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Research Agent Tool",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Research Agent Tool",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Agent Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Orchestrator Agent",
+            "type": "ai_tool",
+            "index": 0
+          },
+          {
+            "node": "Chat Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat Agent": {
+      "main": [
+        [
+          {
+            "node": "Check If Papers Found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check If Papers Found": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Fallback Message for Future Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "28968a2f-98e4-414c-b145-95cd6effb3ad",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e6a95ce088c8d7c608db10440be0922ec8dc868dc532ed6a813a1fc7f9bf262b"
+  },
+  "id": "lLPuTfWED8C5gCYZ",
+  "tags": []
+}
